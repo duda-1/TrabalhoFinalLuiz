@@ -1,0 +1,107 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+ 
+  body {
+    font-family: 'Montserrat';
+    background: #121212;
+    color: #fff;
+    display: flex;
+  }
+ 
+
+ 
+  /* -------------- CONTEÚDO PRINCIPAL -------------- */
+  .main {
+    margin-left: 240px;
+    padding: 100px 20px 20px 20px; /* espaço do topo + sidebar */
+    flex: 1;
+  }
+ 
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+ 
+  header input {
+    width: 60%;
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+  }
+ 
+  header .btns button {
+    background: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+ 
+  /* -------------- ÁLBUNS E ARTISTAS -------------- */
+  .highlights, .popular {
+    margin-top: 30px;
+  }
+ 
+  .albums, .artists {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-top: 10px;
+  }
+ 
+  .album, .artist {
+    width: 150px;
+    flex-shrink: 0;
+    text-align: center;
+  }
+ 
+  .album-img {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+ 
+  .album-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+ 
+  .play-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #1db954;
+    color: white;
+    border-radius: 50%;
+    padding: 12px;
+    display: none;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    transition: transform 0.2s;
+  }
+ 
+  .play-btn:hover {
+    transform: scale(1.1);
+  }
+ 
+  .album:hover .play-btn {
+    display: block;
+  }
+ 
+  .artist img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+  }

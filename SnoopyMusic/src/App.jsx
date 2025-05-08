@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import Premium from './pages/Premium'; // importa a página Premium
 import Cadastro from './pages/Cadastro';
 import Login from './pages/Login';
+import HomePrivate from './pages/HomePrivate';
+import Perfil from './pages/Perfil';
 
 function App() {
   return (
@@ -12,10 +14,11 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/HomePrivate" element={<HomePrivate />} />
         <Route path="/premium" element={<Premium />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/login" element={<div>Entrar</div>} />
+        <Route path="/perfil" element={<Perfil/>} />
       </Routes>
     </Router>
   );

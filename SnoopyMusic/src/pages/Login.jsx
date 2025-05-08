@@ -46,11 +46,12 @@ export default function Login() {
 
       if (response.ok) {
         console.log('Usuário logado com sucesso!', data);
+        window.dispatchEvent(new Event('loginStatusChanged'));
         localStorage.setItem('user', JSON.stringify(data.user));
         setSuccessMessage('Login realizado com sucesso! Redirecionando...');
 
         setTimeout(() => {
-          navigate('/home');
+          navigate('/homeprivate');
         }, 1500); // espera 1.5 segundos para redirecionar
       } else {
         setErrorMessage(data.error || data.message || 'Erro ao fazer login.');
