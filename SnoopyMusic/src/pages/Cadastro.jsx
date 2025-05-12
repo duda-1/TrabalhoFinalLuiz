@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { FaUser, FaEnvelope, FaLock, FaImage } from 'react-icons/fa';
 import './Cadastro.css';
 
 export default function Cadastro() {
@@ -10,16 +11,26 @@ export default function Cadastro() {
     imgUrl: '',
   });
 
-  const [mensagemSucesso, setMensagemSucesso] = useState(''); // NOVO
+  const [mensagemSucesso, setMensagemSucesso] = useState('');
+  const [mensagemErro, setMensagemErro] = useState('');
+  const [erroSenha, setErroSenha] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === 'confirmSenha' || name === 'senha') {
+      setErroSenha(false);
+      setMensagemErro('');
+    }
   };
 
   const handleSubmit = async () => {
+    setMensagemSucesso('');
+    setMensagemErro('');
+
     if (formData.senha !== formData.confirmSenha) {
-      alert('As senhas não coincidem!');
+      setErroSenha(true);
+      setMensagemErro('As senhas não coincidem!');
       return;
     }
 
@@ -33,9 +44,7 @@ export default function Cadastro() {
     try {
       const response = await fetch('https://localhost:7278/api/Usuario/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
       });
 
@@ -43,60 +52,61 @@ export default function Cadastro() {
 
       if (response.ok) {
         setMensagemSucesso('Usuário cadastrado com sucesso!');
-        setFormData({ nome: '', email: '', senha: '', confirmSenha: '', imgUrl: '' }); // Limpa os campos
+        setFormData({ nome: '', email: '', senha: '', confirmSenha: '', imgUrl: '' });
       } else {
-        alert(`Erro: ${data.error || data.message}`);
+        setMensagemErro(data.error || data.message || 'Erro ao registrar.');
       }
     } catch (error) {
-      console.error(error);
-      alert('Erro ao conectar com o servidor.');
+      setMensagemErro('Erro ao conectar com o servidor.');
     }
   };
 
   const irParaLogin = () => {
     const painel = document.getElementById('painelRedirectCadastro');
-    painel.classList.add('expandir-e-cobrir'); // Inicia a animação
-
-    // Aguarda o tempo da animação (1 segundo) para redirecionar
+    painel.classList.add('expandir-e-cobrir');
     setTimeout(() => {
-      window.location.href = '/login'; // Redireciona após a animação
-    }, 1000); // Espera 1 segundo, o tempo da animação
+      window.location.href = '/login';
+    }, 1000);
   };
 
   return (
     <div className="container-cadastro">
       <div className="painel-redirect-cadastro" id="painelRedirectCadastro">
-        <h2>Welcome Back!</h2>
-        <p>Already have an account?</p>
+        <h2>Olá, bem-vindo!</h2>
+        <p>Já possui uma conta? Acesse sua conta aqui.</p>
         <button onClick={irParaLogin}>Login</button>
       </div>
 
       <div className="painel-formulario-cadastro">
-        <h2 className="titulo-cadastro">Register</h2>
+        <h2 className="titulo-cadastro">Cadastro</h2><br/>
 
-        {mensagemSucesso && (
-          <div className="mensagem-sucesso">{mensagemSucesso}</div>
-        )}
+        {mensagemErro && <div className="mensagem-erro">{mensagemErro}</div>}
+        {mensagemSucesso && <div className="mensagem-sucesso">{mensagemSucesso}</div>}
 
         <div className="grupo-input">
           <input type="text" name="nome" placeholder="Nome" value={formData.nome} onChange={handleChange} />
+          <span className="icon"><FaUser /></span>
         </div>
 
         <div className="grupo-input">
           <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
+          <span className="icon"><FaEnvelope /></span>
         </div>
 
-        <div className="grupo-input">
+        <div className={`grupo-input ${erroSenha ? 'input-erro' : ''}`}>
           <input type="password" name="senha" placeholder="Senha" value={formData.senha} onChange={handleChange} />
+          <span className="icon"><FaLock /></span>
         </div>
 
-        <div className="grupo-input">
+        <div className={`grupo-input ${erroSenha ? 'input-erro' : ''}`}>
           <input type="password" name="confirmSenha" placeholder="Confirmar Senha" value={formData.confirmSenha} onChange={handleChange} />
+          <span className="icon"><FaLock /></span>
         </div>
 
+        <label className="label-url">Imagem de Perfil (URL opcional):</label>
         <div className="grupo-input">
-          <label>Imagem de Perfil (URL opcional):</label>
           <input type="text" name="imgUrl" placeholder="Cole a URL da imagem" value={formData.imgUrl} onChange={handleChange} />
+          <span className="icon"><FaImage /></span>
         </div>
 
         <button className="botao-cadastrar" onClick={handleSubmit}>Register</button>

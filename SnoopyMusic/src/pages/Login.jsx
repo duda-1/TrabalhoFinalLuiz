@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Login.css'; // seu CSS adaptado
+import { FaUser, FaLock, FaCheck } from 'react-icons/fa';
+import './Login.css';
 
 export default function Login() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-  });
+  const [formData, setFormData] = useState({ username: '', password: '' });
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotUsername, setForgotUsername] = useState('');
-  const [forgotResponse, setForgotResponse] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [resetResponse, setResetResponse] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,89 +36,90 @@ export default function Login() {
     try {
       const response = await fetch('https://localhost:7278/api/Login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        console.log('Usuário logado com sucesso!', data);
         window.dispatchEvent(new Event('loginStatusChanged'));
         localStorage.setItem('user', JSON.stringify(data.user));
         setSuccessMessage('Login realizado com sucesso! Redirecionando...');
-
-        setTimeout(() => {
-          navigate('/homeprivate');
-        }, 1500); // espera 1.5 segundos para redirecionar
+        setTimeout(() => navigate('/homeprivate'), 1500);
       } else {
         setErrorMessage(data.error || data.message || 'Erro ao fazer login.');
       }
     } catch (error) {
-      console.error('Erro ao conectar:', error);
       setErrorMessage('Erro de conexão com o servidor.');
     }
   };
 
-  const handleForgotPassword = async () => {
-    if (!forgotUsername.trim()) {
-      setForgotResponse('Por favor, informe seu nome de usuário.');
+  const handleResetPassword = async () => {
+    if (!forgotUsername.trim() || !newPassword.trim() || !confirmPassword.trim()) {
+      setResetResponse('Por favor, preencha todos os campos.');
       return;
     }
 
+    if (newPassword !== confirmPassword) {
+      setResetResponse('As senhas não coincidem.');
+      return;
+    }
+
+    const requestBody = { NovaSenha: newPassword };
+
     try {
-      const response = await fetch(`https://localhost:7278/api/Usuario/${forgotUsername}`, {
-        method: 'GET',
+      const response = await fetch(`https://localhost:7278/api/Usuario/RedefinirSenhaPorNome/${forgotUsername}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
       });
 
-      const data = await response.json();
+      const text = await response.text();
+      const data = text ? JSON.parse(text) : {};
 
       if (response.ok) {
-        setForgotResponse('Usuário encontrado! Verifique seu e-mail para redefinir a senha.');
+        setResetResponse('Senha redefinida com sucesso!');
+        setTimeout(() => {
+          setShowForgotPassword(false);
+          setForgotUsername('');
+          setNewPassword('');
+          setConfirmPassword('');
+          setResetResponse('');
+        }, 2000);
       } else {
-        setForgotResponse(data.error || data.message || 'Usuário não encontrado.');
+        setResetResponse(data.error || data.message || 'Erro ao redefinir a senha.');
       }
     } catch (error) {
-      console.error('Erro ao conectar:', error);
-      setForgotResponse('Erro de conexão com o servidor.');
+      setResetResponse('Erro de conexão com o servidor.');
     }
   };
 
-  const goToRegister = () => {
-    const panel = document.getElementById('leftPanel');
-    const fullpage = document.querySelector('.fullpage');
-    
-    if (panel) {
-      panel.classList.add('slide-right'); // Inicia a animação do painel
-      fullpage.classList.add('slide'); // Aplica a animação de fundo
-      setTimeout(() => {
-        navigate('/cadastro'); // Redireciona para a página de cadastro após a animação
-      }, 1000); // Espera 1 segundo para completar a animação
-    } else {
-      navigate('/cadastro'); // Se o painel não existir, apenas navega
-    }
-  };
+ const goToRegister = () => {
+  const panel = document.getElementById('leftPanel');
+
+  if (panel) {
+    panel.classList.add('expandir-e-cobrir-esquerda');
+    setTimeout(() => navigate('/cadastro'), 1000);
+  } else {
+    navigate('/cadastro');
+  }
+};
+
 
   return (
-    <div className="fullpage">
-      <div className="left-panel" id="leftPanel">
-        <h2>Hello, Welcome!</h2>
-        <p>Don't have an account?</p>
-        <button onClick={goToRegister}>Cadastro</button>
-      </div>
+   <div className="fullpage">
+  <div className="left-panel" id="leftPanel">
+    <h2>Bem-vindo de Volta!</h2>
+    <p>Não tem uma conta? Cadastre-se já!</p>
+    <button onClick={goToRegister}>Cadastro</button>
+  </div>
 
       <div className="right-panel full-width">
-        <h2 className="log">Login</h2>
+        <h2 className="log">Login</h2><br/>
 
-        {errorMessage && (
-          <div className="mensagem-erro">{errorMessage}</div>
-        )}
-
-        {successMessage && (
-          <div className="mensagem-sucesso">{successMessage}</div>
-        )}
+        {errorMessage && <div className="mensagem-erro">{errorMessage}</div>}
+        {successMessage && <div className="mensagem-sucesso">{successMessage}</div>}
 
         <div className="input-group">
           <input
@@ -128,6 +129,7 @@ export default function Login() {
             value={formData.username}
             onChange={handleChange}
           />
+          <span><FaUser /></span>
         </div>
 
         <div className="input-group">
@@ -138,27 +140,51 @@ export default function Login() {
             value={formData.password}
             onChange={handleChange}
           />
+          <span><FaLock /></span>
         </div>
 
-        <p 
-          className="forgot-password-link" 
-          onClick={() => setShowForgotPassword(!showForgotPassword)}
-        >
-          Forgot Password?
+        <p className="forgot-password-link" onClick={() => setShowForgotPassword(!showForgotPassword)}>
+          Esqueceu a Senha?
         </p>
 
         <button className="login-btn" onClick={handleLogin}>Login</button>
 
         {showForgotPassword && (
           <div className="forgot-password-modal">
-            <input
-              type="text"
-              placeholder="Digite seu username"
-              value={forgotUsername}
-              onChange={(e) => setForgotUsername(e.target.value)}
-            />
-            <button onClick={handleForgotPassword}>Recuperar Senha</button>
-            {forgotResponse && <p className="forgot-response">{forgotResponse}</p>}
+            <h3>Redefinir Senha</h3>
+
+            <div className="input-group">
+              <input
+                type="text"
+                placeholder="Digite seu nome de usuário"
+                value={forgotUsername}
+                onChange={(e) => setForgotUsername(e.target.value)}
+              />
+              <span><FaUser /></span>
+            </div>
+
+            <div className="input-group">
+              <input
+                type="password"
+                placeholder="Nova senha"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              <span><FaLock /></span>
+            </div>
+
+            <div className="input-group">
+              <input
+                type="password"
+                placeholder="Confirme a nova senha"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <span><FaCheck /></span>
+            </div>
+
+            <button onClick={handleResetPassword}>Redefinir Senha</button>
+            {resetResponse && <p className="forgot-response">{resetResponse}</p>}
           </div>
         )}
       </div>
