@@ -3,3 +3,9 @@
   font-family: 'Montserrat', sans-serif;
 }
 
+body {
+  font-family: 'Montserrat';
+  background: #121212;
+  color: #fff;
+  display: flex;
+}

@@ -1,23 +1,20 @@
-/* === TÍTULO DA SEÇÃO DE LOGIN === */
 .log {
   text-align: center;
-  color: #000;
+  color: #7eb6ff;
 }
 
-/* === CONTAINER PRINCIPAL === */
 .fullpage {
   display: flex;
   height: 100vh;
   width: 100vw;
-  background: #6c8ef7; /* Cor de fundo do painel esquerdo */
+  background: #000;
   overflow: hidden;
   position: relative;
-  transition: background-color 1s ease; /* A cor do fundo continua */
+  transition: background-color 1s ease;
 }
 
-/* === PAINEL DE REDIRECIONAMENTO PARA CADASTRO === */
 .left-panel {
-  background: #6c8ef7; /* Cor de fundo do painel esquerdo */
+  background: #7eb6ff;
   color: white;
   width: 50%;
   height: 100%;
@@ -33,7 +30,6 @@
   transition: transform 1s ease-in-out;
 }
 
-/* Botão do painel de redirecionamento */
 .left-panel button {
   margin-top: 20px;
   padding: 10px 25px;
@@ -47,21 +43,39 @@
 }
 
 .left-panel button:hover {
-  background: #7eb6ff;
-  color: white;
+  background: white;
+  color: #7eb6ff;
   transform: scale(1.05);
 }
 
-/* Animação do painel de redirecionamento */
 .left-panel.slide-right {
-  transform: translateX(100%); /* Painel da esquerda desliza para fora */
+  transform: translateX(100%);
+}
+@keyframes expandirPainelEsquerda {
+  from {
+    transform: translateX(0);
+    width: 50%;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+  }
+  to {
+    transform: translateX(0);
+    width: 100%;
+    border-radius: 0;
+  }
 }
 
-/* === PAINEL COM FORMULÁRIO DE LOGIN === */
+.expandir-e-cobrir-esquerda {
+  animation: expandirPainelEsquerda 1s ease forwards;
+  z-index: 10;
+}
+
+
+/* Formulario de login  */
 .right-panel {
-  width: 100%; /* Ocupa toda a tela após a animação */
-  margin-left: 50%; /* Fica ao lado do painel esquerdo inicialmente */
-  background: white;
+  width: 100%;
+  margin-left: 50%;
+  background: #000;
   padding: 50px;
   display: flex;
   flex-direction: column;
@@ -71,38 +85,11 @@
   transition: transform 1s ease-in-out;
 }
 
-/* === ANIMAÇÃO DO PAINEL DE LOGIN === */
-@keyframes slideRight {
-  from {
-    transform: translateX(0%); /* Começa no lugar */
-  }
-  to {
-    transform: translateX(100%); /* Desliza completamente para a direita */
-  }
-}
-
-.slide-right {
-  animation: slideRight 1s forwards;
-}
-
-/* === ANIMAÇÃO DE MUDANÇA DE FUNDO DURANTE A TRANSIÇÃO === */
-@keyframes changeBackground {
-  from {
-    background-color: #6c8ef7; /* Cor inicial do fundo */
-  }
-  to {
-    background-color: #6c8ef7; /* Mantém a cor do fundo do painel esquerdo */
-  }
-}
-
-.fullpage.slide {
-  animation: changeBackground 1s forwards; /* Mantém o fundo consistente */
-}
-
-/* === CAMPOS DE INPUT COM ICONES === */
 .input-group {
   position: relative;
   margin-bottom: 15px;
+  width: 100%;
+  max-width: 300px;
 }
 
 .input-group input {
@@ -110,23 +97,30 @@
   padding: 10px 35px 10px 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
-  background-color: white; /* Garantir que os campos de input sejam brancos */
+  background-color: rgba(255, 255, 255, 0.103);
 }
 
-/* === LINK PARA ESQUECEU A SENHA === */
+.input-group span {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7eb6ff;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
 .forgot-password-link {
-  color: #6c8ef7;
-  text-decoration: underline;
+  color: #7eb6ff;
+  text-decoration: none;
   cursor: pointer;
   margin-bottom: 15px;
   text-align: center;
 }
 
-
-/* === BOTÃO DE LOGIN === */
 .login-btn {
   padding: 10px;
-  background: #6c8ef7;
+  background: #7eb6ff;
   color: white;
   font-weight: bold;
   border: none;
@@ -135,26 +129,35 @@
   margin-bottom: 15px;
 }
 
-/* === MODAL PARA ESQUECEU A SENHA === */
 .forgot-password-modal {
+  background: #11111100;
+  box-shadow: 2px 3px 12px 2px #7eb6ff8f;
+  padding: 20px;
+  border-radius: 10px;
   margin-top: 20px;
-  padding: 15px;
-  background: #f1f1f1;
-  border-radius: 8px;
+  color: white;
+  width: 100%;
+  max-width: 320px;
   text-align: center;
 }
 
-.forgot-password-modal input {
-  width: 80%;
-  padding: 8px;
+.forgot-password-modal h3 {
+  margin-bottom: 15px;
+  color: #7eb6ff;
+}
+
+.forgot-password-modal .input-group {
   margin-bottom: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+}
+
+.forgot-password-modal .input-group input {
+  background: rgba(255, 255, 255, 0);
+  color: black;
 }
 
 .forgot-password-modal button {
-  padding: 8px 12px;
-  background: #6c8ef7;
+  padding: 10px;
+  background: #7eb6ff;
   color: white;
   border: none;
   border-radius: 6px;
@@ -164,16 +167,16 @@
 .forgot-response {
   margin-top: 10px;
   font-size: 0.9em;
-  color: #333;
+  color: #7eb6ff;
 }
 
-/* === RESPONSIVIDADE PARA TELAS PEQUENAS === */
 @media (max-width: 768px) {
   .fullpage {
     flex-direction: column;
   }
 
-  .left-panel, .right-panel {
+  .left-panel,
+  .right-panel {
     width: 100%;
     height: auto;
     position: relative;
