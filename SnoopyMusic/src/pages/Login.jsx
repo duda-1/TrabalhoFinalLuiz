@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaLock, FaCheck } from 'react-icons/fa';
+import { FaUser, FaLock, FaCheck,FaArrowRight } from 'react-icons/fa';
 import './Login.css';
 
 export default function Login() {
@@ -109,7 +109,11 @@ export default function Login() {
 
   return (
    <div className="fullpage">
+        <button className="botao-cadastro-mobile-topo" onClick={goToRegister}>
+      <FaArrowRight />
+    </button>
   <div className="left-panel" id="leftPanel">
+
     <h2>Bem-vindo de Volta!</h2>
     <p>Não tem uma conta? Cadastre-se já!</p>
     <button onClick={goToRegister}>Cadastro</button>
