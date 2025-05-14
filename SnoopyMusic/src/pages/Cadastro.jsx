@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { FaUser, FaEnvelope, FaLock, FaImage } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaLock, FaImage, FaArrowLeft } from 'react-icons/fa'; // Adiciona FaArrowLeft
+
 import './Cadastro.css';
 
 export default function Cadastro() {
@@ -71,11 +72,15 @@ export default function Cadastro() {
 
   return (
     <div className="container-cadastro">
+      <button className="botao-login-mobile-topo" onClick={irParaLogin}>
+      <FaArrowLeft />
+      </button>
       <div className="painel-redirect-cadastro" id="painelRedirectCadastro">
-        <h2>Olá, bem-vindo!</h2>
-        <p>Já possui uma conta? Acesse sua conta aqui.</p>
-        <button onClick={irParaLogin}>Login</button>
-      </div>
+      <h2>Olá, bem-vindo!</h2>
+      <p>Já possui uma conta? Acesse sua conta aqui.</p>
+      <button className="botao-login-mobile" onClick={irParaLogin}>Login</button>
+    </div>
+
 
       <div className="painel-formulario-cadastro">
         <h2 className="titulo-cadastro">Cadastro</h2><br/>
@@ -107,9 +112,14 @@ export default function Cadastro() {
         <div className="grupo-input">
           <input type="text" name="imgUrl" placeholder="Cole a URL da imagem" value={formData.imgUrl} onChange={handleChange} />
           <span className="icon"><FaImage /></span>
-        </div>
+        </div><br/>
 
         <button className="botao-cadastrar" onClick={handleSubmit}>Register</button>
+
+        <p className="texto-login-mobile">
+        Já possui uma conta? <a href="/login">Faça já o login</a>
+      </p>
+
       </div>
     </div>
   );

@@ -152,3 +152,121 @@
   border: 1px solid #f5c6cb;
 }
 
+/* responcividade */
+
+/* Botão de login exclusivo para mobile */
+.botao-login-mobile-topo {
+  display: none; /* invisível no desktop */
+}
+@media (max-width: 768px) {
+
+  /* Botão com ícone de seta para a esquerda */
+  .botao-login-mobile-topo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background: transparent;
+    color: #7eb6ff;
+    border: 2px solid #7eb6ff;
+    border-radius: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 30;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .botao-login-mobile-topo:hover {
+    background: #7eb6ff;
+    color: white;
+  }
+
+  .container-cadastro {
+    flex-direction: column;
+    height: 100vh;
+    position: relative;
+  }
+
+  /* Painel de redirecionamento (slide da direita para a esquerda) */
+  .painel-redirect-cadastro {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    padding: 40px 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #7eb6ff;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    transform: translateX(100%); /* Fora da tela à direita */
+  transition: transform 1s ease-in-out;
+  }
+
+  .painel-redirect-cadastro.expandir-e-cobrir {
+    transform: translateX(0); /* Move para a esquerda (entra na tela) */
+  }
+
+  /* Botão de login no painel de redirecionamento */
+  .painel-redirect-cadastro .botao-login-mobile {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .painel-redirect-cadastro .botao-login-mobile:hover {
+    background: white;
+    color: #7eb6ff;
+  }
+
+  /* Formulário de cadastro */
+  .painel-formulario-cadastro {
+    width: 100%;
+    height: 100%;
+    padding: 40px 20px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .grupo-input,
+  .botao-cadastrar,
+  .mensagem-sucesso,
+  .mensagem-erro,
+  .label-url {
+    width: 100%;
+  }
+
+  /* Novo texto com link para o login */
+  .texto-login-mobile {
+    color: #ccc;
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .texto-login-mobile a {
+    color: #7eb6ff;
+    text-decoration: none;
+  }
+
+  .texto-login-mobile a:hover {
+    color: white;
+  }
+
+}
