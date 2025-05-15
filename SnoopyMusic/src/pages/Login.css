@@ -177,7 +177,7 @@
 .botao-cadastro-mobile-topo{
   display: none; /* invisível no desktop */
 }
-@media (max-width: 768px) {
+@media (max-width: 500px) {
   .fullpage {
     flex-direction: column;
     position: relative;
