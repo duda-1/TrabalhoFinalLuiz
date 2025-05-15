@@ -1,32 +1,46 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './NavBar.css';
+import defaultAvatar from '../img/avatar.png'; // <-- imagem local importada
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('user'));
+  const [profileImage, setProfileImage] = useState(defaultAvatar);
   const navigate = useNavigate();
 
-  // Atualiza o estado se o evento customizado for disparado
   useEffect(() => {
     const checkLoginStatus = () => {
-      setIsLoggedIn(!!localStorage.getItem('user'));
+      const user = localStorage.getItem('user');
+      setIsLoggedIn(!!user);
+
+      if (user) {
+        const userData = JSON.parse(user);
+
+        // Exemplo: carregando imagem de perfil da API (ou banco de dados)
+        fetch(`https://localhost:7278/api/Usuario${userData.id}`) // Altere para o endpoint correto da sua API
+          .then(res => res.json())
+          .then(data => {
+            if (data.profileImage) {
+              setProfileImage(data.profileImage);
+            } else {
+              setProfileImage(defaultAvatar);
+            }
+          })
+          .catch(() => {
+            setProfileImage(defaultAvatar);
+          });
+      }
     };
+
+    checkLoginStatus();
 
     window.addEventListener('loginStatusChanged', checkLoginStatus);
-
-    return () => {
-      window.removeEventListener('loginStatusChanged', checkLoginStatus);
-    };
+    return () => window.removeEventListener('loginStatusChanged', checkLoginStatus);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    setIsLoggedIn(false);
-
-    // Dispara evento para atualizar outros componentes, se necessário
-    window.dispatchEvent(new Event('loginStatusChanged'));
-    navigate('/');
+  const goToProfile = () => {
+    navigate('/perfil');
   };
 
   if (isLoggedIn) {
@@ -38,6 +52,7 @@ const NavBar = () => {
               <i className="fas fa-dog"></i>
               Snoopy Songs
             </div>
+
             <div className="nav-search">
               <input type="text" placeholder="O que você quer ouvir?" />
             </div>
@@ -45,12 +60,17 @@ const NavBar = () => {
 
           <ul className="nav-links">
             <li><a href="#"><i className="fas fa-home"></i> Início</a></li>
-            <li><a href="#">Categotias</a></li>
+            <li><a href="#">Categorias</a></li>
             <li><a href="#">PlayList</a></li>
           </ul>
 
           <div className="nav-right">
-            <button className="login" onClick={handleLogout}>Sair</button>
+            <img
+              src={profileImage}
+              alt="Perfil"
+              className="profile-avatar"
+              onClick={goToProfile}
+            />
           </div>
         </nav>
 
@@ -95,7 +115,7 @@ const NavBar = () => {
       <nav>
         <ul className={menuOpen ? 'open' : ''}>
           <li><Link to="/" onClick={() => setMenuOpen(false)}>Início</Link></li>
-          <li><Link to="/HomePrivate" onClick={() => setMenuOpen(false)}>HomePrivate</Link></li>
+          <li><Link to="/HomePrivate" onClick={() => setMenuOpen(false)}>Artista</Link></li>
           <li><Link to="/login" onClick={() => setMenuOpen(false)}>Entrar</Link></li>
         </ul>
       </nav>
