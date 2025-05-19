@@ -59,7 +59,7 @@ const NavBar = () => {
           </div>
 
           <ul className="nav-links">
-            <li><a href="#"><i className="fas fa-home"></i> Início</a></li>
+            <li><a href="HomePrivate"><i className="fas fa-home"></i> Início</a></li>
             <li><a href="#">Categorias</a></li>
             <li><a href="#">PlayList</a></li>
           </ul>
